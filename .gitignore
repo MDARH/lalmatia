@@ -1,0 +1,17 @@
+/public/storage
+/public/css
+/public/js
+/public/vendor
+/public/themes
+/vendor
+Homestead.json
+Homestead.yaml
+yarn-error.log
+.env
+/ignorables/*
+yarn.lock
+package-lock.json
+yarn.lock
+.php_cs.cache
+storage/
+storage/*.key
