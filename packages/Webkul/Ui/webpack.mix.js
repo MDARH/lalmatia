@@ -1,4 +1,4 @@
-const mix = require("laravel-mix");
+kconst mix = require("laravel-mix");
 
 if (mix == 'undefined') {
     const { mix } = require("laravel-mix");

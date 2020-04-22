@@ -98,12 +98,12 @@
             var summaryTemplateRenderFns = [];
             var shippingTemplateRenderFns = [];
 
-            @auth('customer')
-                @if(auth('customer')->user()->addresses)
-                    customerAddress = @json(auth('customer')->user()->addresses);
-                    customerAddress.email = "{{ auth('customer')->user()->email }}";
-                    customerAddress.first_name = "{{ auth('customer')->user()->first_name }}";
-                    customerAddress.last_name = "{{ auth('customer')->user()->last_name }}";
+            @auth('newcustomer')
+                @if(auth('newcustomer')->user()->addresses)
+                    customerAddress = @json(auth('newcustomer')->user()->addresses);
+                    customerAddress.email = "{{ auth('newcustomer')->user()->email }}";
+                    customerAddress.first_name = "{{ auth('newcustomer')->user()->first_name }}";
+                    customerAddress.last_name = "{{ auth('newcustomer')->user()->last_name }}";
                 @endif
             @endauth
 
@@ -160,8 +160,8 @@
                         this.new_shipping_address = true;
                         this.new_billing_address = true;
                     } else {
-                        this.address.billing.first_name = this.address.shipping.first_name = customerAddress.first_name;
-                        this.address.billing.last_name = this.address.shipping.last_name = customerAddress.last_name;
+                        this.address.billing.full_name = this.address.shipping.full_name = customerAddress.full_name;
+                        this.address.billing.mobile = this.address.shipping.mobile = customerAddress.mobile;
                         this.address.billing.email = this.address.shipping.email = customerAddress.email;
 
                         if (customerAddress.length < 1) {
@@ -169,16 +169,6 @@
                             this.new_billing_address = true;
                         } else {
                             this.allAddress = customerAddress;
-
-                            for (var country in this.country) {
-                                for (var code in this.allAddress) {
-                                    if (this.allAddress[code].country) {
-                                        if (this.allAddress[code].country == this.country[country].code) {
-                                            this.allAddress[code]['country'] = this.country[country].name;
-                                        }
-                                    }
-                                }
-                            }
                         }
                     }
                 },
@@ -189,13 +179,6 @@
                             this.current_step = step
                             this.completed_step = step - 1;
                         }
-                    },
-
-                    haveStates: function (addressType) {
-                        if (this.countryStates[this.address[addressType].country] && this.countryStates[this.address[addressType].country].length)
-                            return true;
-
-                        return false;
                     },
 
                     validateForm: function (scope) {
@@ -287,7 +270,7 @@
                     },
 
                     isCustomerExist: function() {
-                        this.$validator.attach('address-form.billing[email]', 'required|email');
+                        this.$validator.attach('address-form.billing[email]', 'email');
 
                         this.$validator.validate('address-form.billing[email]', this.address.billing.email)
                         .then(isValid => {
